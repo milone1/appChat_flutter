@@ -6,7 +6,7 @@ import 'package:appchat_flutter/screens/user_screen.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, Widget Function(BuildContext)> appRoutes = {
-  'user': ( _ ) => const UserScreen(),
+  'user': ( _ ) => UserScreen(),
   'chat': ( _ ) => const ChatScreen(),
   'login': ( _ ) => const LoginScreen(),
   'register': ( _ ) => const RegisterScreen(),
