@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appchat_flutter/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,11 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController _textController = TextEditingController();
+class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
+  final TextEditingController _txtController = TextEditingController();
   final _focusNode = FocusNode();
-  bool _estaEscribiendo = false;
+  bool _isActive = false;
+  List<ChatMesssage> _messages = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,26 +50,25 @@ class _ChatScreenState extends State<ChatScreen> {
         centerTitle: true,
         elevation: 1,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Flexible(
-              child: ListView.builder(
-                reverse: true,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (_, i) => Text('$i'),
-              ),
+      body: Column(
+        children: [
+          Flexible(
+            child: ListView.builder(
+              reverse: true,
+              physics: const BouncingScrollPhysics(),
+              itemCount: _messages.length,
+              itemBuilder: (_, i) => _messages[i],
             ),
-            const Divider(
-              height: 1,
-            ),
-            Container(
-              color: Colors.white,
-              height: 100,
-              child: _inputChat(),
-            ),
-          ],
-        ),
+          ),
+          const Divider(
+            height: 1,
+          ),
+          Container(
+            color: Colors.white,
+            height: 50,
+            child: _inputChat(),
+          ),
+        ],
       ),
     );
   }
@@ -82,16 +83,16 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Flexible(
             child: TextField(
-              controller: _textController,
+              controller: _txtController,
               onSubmitted: _handleSubmit,
               onChanged: (texto) {
-                // setState(() {
-                //   if (texto.length > 0) {
-                //     _estaEscribiendo = true;
-                //   } else {
-                //     _estaEscribiendo = false;
-                //   }
-                // });
+                setState(() {
+                  if (texto.isNotEmpty) {
+                    _isActive = true;
+                  } else {
+                    _isActive = false;
+                  }
+                });
               },
               decoration: const InputDecoration.collapsed(
                 hintText: 'Enviar Mensaje',
@@ -103,24 +104,29 @@ class _ChatScreenState extends State<ChatScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Platform.isIOS
                 ? CupertinoButton(
-                    onPressed: !_estaEscribiendo
-                        ? () => _handleSubmit(_textController.text.trim())
+                    onPressed: _isActive
+                        ? () {
+                            _handleSubmit(_txtController.text);
+                          }
                         : null,
                     child: const Text('Send'),
                   )
                 : Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: const IconTheme(
-                      data: IconThemeData(color: Colors.blue),
+                    child: IconTheme(
+                      data: const IconThemeData(color: Colors.blue),
                       child: IconButton(
-                        
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         icon: Icon(
                           Icons.send,
-                          color: Colors.blue,
+                          color: (_isActive ? Colors.blue : Colors.grey),
                         ),
-                        onPressed: null,
+                        onPressed: _isActive
+                            ? () {
+                                _handleSubmit(_txtController.text);
+                              }
+                            : null,
                       ),
                     ),
                   ),
@@ -131,11 +137,19 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   _handleSubmit(String text) {
-    print(text);
+    if (text.isEmpty) return;
     _focusNode.requestFocus();
-    _textController.clear();
+    _txtController.clear();
+    final newMessage = ChatMesssage(
+      text: text,
+      uid: '123',
+      animationController: AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 200)),
+    );
+    _messages.insert(0, newMessage);
+    newMessage.animationController.forward();
     setState(() {
-      _estaEscribiendo = false;
+      _isActive = false;
     });
   }
 }
