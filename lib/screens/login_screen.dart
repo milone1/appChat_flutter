@@ -1,8 +1,11 @@
+import 'package:appchat_flutter/Helpers/show_dialog.dart';
+import 'package:appchat_flutter/services/auth_service.dart';
 import 'package:appchat_flutter/widgets/button_login.dart';
 import 'package:appchat_flutter/widgets/custom_input.dart';
 import 'package:flutter/material.dart';
 import 'package:appchat_flutter/widgets/labels_login.dart';
 import 'package:appchat_flutter/widgets/login_image.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -46,8 +49,10 @@ class LoginScreen extends StatelessWidget {
 class _Form extends StatelessWidget {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: const EdgeInsets.only(top: 40),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -68,10 +73,22 @@ class _Form extends StatelessWidget {
           ),
           ButtonLogin(
             text: 'INGRESAR',
-            onPressed: () {
-              print(emailCtrl.text);
-              print(passCtrl.text);
-            },
+            color: authService.autenticando ? Colors.grey : Colors.blueAccent,
+            onPressed: authService.autenticando
+                ? () {}
+                : () async {
+                    FocusScope.of(context).unfocus();
+
+                    final loginOk = await authService.Login(
+                        emailCtrl.text.trim(), passCtrl.text.trim());
+                    if (loginOk) {
+                      // entrar a la ptra pantalla reemplazando la ruta que ya no se usara
+                      Navigator.pushReplacementNamed(context, 'user');
+                    } else {
+                      showOpenDialog(context, 'Login Incorrecto!',
+                          'Revise sus credenciales nuevamente');
+                    }
+                  },
           ),
         ],
       ),

@@ -12,27 +12,14 @@ class _UserScreenState extends State<UserScreen> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final usuarios = [
-    User(online: true, email: 'juan@gmail.com', name: 'Juan', uid: '1'),
-    User(online: false, email: 'jua1@gmail.com', name: 'Mari', uid: '2'),
-    User(online: true, email: 'jua2@gmail.com', name: 'Ludo', uid: '3'),
-    User(online: false, email: 'jua3@gmail.com', name: 'Buda', uid: '4'),
-    User(online: true, email: 'jua4@gmail.com', name: 'Jose', uid: '5'),
-    User(online: false, email: 'jua5@gmail.com', name: 'Laun', uid: '6'),
-    User(online: true, email: 'jua6@gmail.com', name: 'Jean', uid: '7'),
-    User(online: false, email: 'jua7@gmail.com', name: 'Juis', uid: '8'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
-    User(online: true, email: 'jua8@gmail.com', name: 'Kilo', uid: '9'),
+    User(
+      online: true,
+      email: 'juan@gmail.com',
+      nombre: 'Juan',
+      uid: '1',
+    ),
+    User(online: false, email: 'juanr@gmail.com', nombre: 'Juan', uid: '2'),
+    User(online: true, email: 'juan1@gmail.com', nombre: 'Juan', uid: '3'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -89,12 +76,12 @@ class _UserScreenState extends State<UserScreen> {
 
   ListTile _usuarioListTile(User usuario) {
     return ListTile(
-        title: Text(usuario.name),
+        title: Text(usuario.nombre),
         subtitle: Text(usuario.email),
         leading: CircleAvatar(
           backgroundColor: Colors.blueAccent,
           child: Text(
-            usuario.name.substring(0, 2),
+            usuario.nombre.substring(0, 2),
           ),
         ),
         trailing: Container(

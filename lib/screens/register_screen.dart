@@ -1,8 +1,11 @@
+import 'package:appchat_flutter/Helpers/show_dialog.dart';
+import 'package:appchat_flutter/services/auth_service.dart';
 import 'package:appchat_flutter/widgets/button_login.dart';
 import 'package:appchat_flutter/widgets/custom_input.dart';
 import 'package:flutter/material.dart';
 import 'package:appchat_flutter/widgets/labels_login.dart';
 import 'package:appchat_flutter/widgets/login_image.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -24,8 +27,8 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 _Form(),
                 const Labels(
-                  route: 'login', 
-                  title:'¿Ya tienes una cuenta?',
+                  route: 'login',
+                  title: '¿Ya tienes una cuenta?',
                   subtitle: 'Ingresa Ahora',
                 ),
                 const Text(
@@ -49,6 +52,7 @@ class _Form extends StatelessWidget {
   final nameCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: const EdgeInsets.only(top: 40),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -75,11 +79,24 @@ class _Form extends StatelessWidget {
             isPassword: true,
           ),
           ButtonLogin(
-            text: 'INGRESAR',
-            onPressed: () {
-              print(emailCtrl.text);
-              print(passCtrl.text);
-            },
+            text: 'Crear Cuenta',
+            color: authService.autenticando ? Colors.grey : Colors.blue,
+            onPressed: authService.autenticando
+                ? () {}
+                : () async {
+                    print(emailCtrl.text);
+                    print(passCtrl.text);
+                    final regsitroOk = await authService.register(
+                        nameCtrl.text.trim(),
+                        emailCtrl.text.trim(),
+                        passCtrl.text.trim());
+                    if (regsitroOk == true) {
+                      Navigator.pushReplacementNamed(context, 'user');
+                    } else {
+                      showOpenDialog(
+                          context, 'Registro Incorrecto', regsitroOk);
+                    }
+                  },
           ),
         ],
       ),

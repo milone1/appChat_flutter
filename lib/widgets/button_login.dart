@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ButtonLogin extends StatelessWidget {
-  const ButtonLogin({super.key, required this.text, required this.onPressed});
+  const ButtonLogin(
+      {super.key, required this.text, required this.onPressed, this.color});
   final String text;
   final Function() onPressed;
+  final color;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -18,7 +20,7 @@ class ButtonLogin extends StatelessWidget {
         IconButton(
           onPressed: onPressed,
           iconSize: 76,
-          color: Colors.blue,
+          color: color,
           icon: const Icon(
             Icons.arrow_circle_right_rounded,
           ),

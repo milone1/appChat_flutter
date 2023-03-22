@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:appchat_flutter/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -76,9 +75,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   Widget _inputChat() {
     return SafeArea(
         child: Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         children: [
           Flexible(
@@ -106,10 +103,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ? CupertinoButton(
                     onPressed: _isActive
                         ? () {
-                            _handleSubmit(_txtController.text);
+                            _handleSubmit(_txtController.text.trim());
                           }
                         : null,
-                    child: const Text('Send'),
+                    child: const Text(
+                      'Send',
+                      style: TextStyle(color: Colors.blue),
+                    ),
                   )
                 : Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -120,7 +120,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         splashColor: Colors.transparent,
                         icon: Icon(
                           Icons.send,
-                          color: (_isActive ? Colors.blue : Colors.grey),
+                          color: (_isActive ? Colors.blue : Colors.blue[400]),
                         ),
                         onPressed: _isActive
                             ? () {
