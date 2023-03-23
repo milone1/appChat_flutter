@@ -1,5 +1,8 @@
 import 'package:appchat_flutter/models/user.dart';
+import 'package:appchat_flutter/services/auth_service.dart';
+import 'package:appchat_flutter/services/socket_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UserScreen extends StatefulWidget {
@@ -23,12 +26,15 @@ class _UserScreenState extends State<UserScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+    final user = authService.usuario;
     return Scaffold(
         appBar: AppBar(
-          title: const Center(
+          title: Center(
             child: Text(
-              "USUARIO NAME",
-              style: TextStyle(color: Colors.black54),
+              user.nombre,
+              style: const TextStyle(color: Colors.black54),
             ),
           ),
           elevation: 10,
@@ -38,14 +44,19 @@ class _UserScreenState extends State<UserScreen> {
               Icons.exit_to_app_rounded,
               color: Colors.black54,
             ),
-            onPressed: () {},
+            onPressed: () {
+              AuthService.deleteToken;
+              Navigator.pushReplacementNamed(context, 'login');
+            },
           ),
           actions: <Widget>[
             Container(
               margin: const EdgeInsets.only(right: 10),
-              child: const Icon(
+              child: Icon(
                 Icons.check_circle_outline_rounded,
-                color: Colors.blue,
+                color: (socketService.serverStatus == ServerStatus.Online
+                    ? Colors.blue
+                    : Colors.red),
               ),
             ),
           ],

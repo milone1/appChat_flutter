@@ -1,5 +1,6 @@
 import 'package:appchat_flutter/Helpers/show_dialog.dart';
 import 'package:appchat_flutter/services/auth_service.dart';
+import 'package:appchat_flutter/services/socket_service.dart';
 import 'package:appchat_flutter/widgets/button_login.dart';
 import 'package:appchat_flutter/widgets/custom_input.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,8 @@ class _Form extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+
     return Container(
       margin: const EdgeInsets.only(top: 40),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -82,6 +85,7 @@ class _Form extends StatelessWidget {
                     final loginOk = await authService.Login(
                         emailCtrl.text.trim(), passCtrl.text.trim());
                     if (loginOk) {
+                      socketService.connect();
                       // entrar a la ptra pantalla reemplazando la ruta que ya no se usara
                       Navigator.pushReplacementNamed(context, 'user');
                     } else {

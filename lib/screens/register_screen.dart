@@ -1,5 +1,6 @@
 import 'package:appchat_flutter/Helpers/show_dialog.dart';
 import 'package:appchat_flutter/services/auth_service.dart';
+import 'package:appchat_flutter/services/socket_service.dart';
 import 'package:appchat_flutter/widgets/button_login.dart';
 import 'package:appchat_flutter/widgets/custom_input.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,8 @@ class _Form extends StatelessWidget {
   final nameCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 40),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -84,13 +86,12 @@ class _Form extends StatelessWidget {
             onPressed: authService.autenticando
                 ? () {}
                 : () async {
-                    print(emailCtrl.text);
-                    print(passCtrl.text);
                     final regsitroOk = await authService.register(
                         nameCtrl.text.trim(),
                         emailCtrl.text.trim(),
                         passCtrl.text.trim());
                     if (regsitroOk == true) {
+                      socketService.connect();
                       Navigator.pushReplacementNamed(context, 'user');
                     } else {
                       showOpenDialog(
