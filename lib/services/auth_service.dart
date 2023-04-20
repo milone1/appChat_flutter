@@ -13,11 +13,11 @@ class AuthService with ChangeNotifier {
   final String urlRegister = '${Enviroments.apiUrl}/login/new';
   final String urlRenew = '${Enviroments.apiUrl}/login/renew';
 
-  final _storage = new FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
 
   bool _autenticando = false;
 
-  bool get autenticando => this._autenticando;
+  bool get autenticando => _autenticando;
 
   set autenticando(bool valor) {
     _autenticando = valor;
@@ -26,18 +26,19 @@ class AuthService with ChangeNotifier {
 
   //* getters de manera estatica
   static Future<String?> get getToken async {
-    final _storage = new FlutterSecureStorage();
-    final token = await _storage.read(key: 'token');
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
     return token;
   }
 
   static Future<void> get deleteToken async {
-    final _storage = new FlutterSecureStorage();
-    await _storage.read(key: 'token');
+    const storage = FlutterSecureStorage();
+    await storage.read(key: 'token');
   }
 
+  // ignore: non_constant_identifier_names
   Future Login(String email, String password) async {
-    this.autenticando = true;
+    autenticando = true;
 
     final data = {'email': email, 'password': password};
     final res = await http.post(
@@ -48,12 +49,11 @@ class AuthService with ChangeNotifier {
       },
     );
 
-    print(res.body);
-    this.autenticando = false;
+    autenticando = false;
 
     if (res.statusCode == 200) {
       final loginResponse = loginResponseFromJson(res.body);
-      this.usuario = loginResponse.usuario;
+      usuario = loginResponse.usuario;
       await _saveToken(loginResponse.token);
       return true;
     } else {
@@ -62,7 +62,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future register(String nombre, String email, String password) async {
-    this.autenticando = true;
+    autenticando = true;
 
     final data = {'nombre': nombre, 'email': email, 'password': password};
     final res = await http.post(
@@ -73,12 +73,11 @@ class AuthService with ChangeNotifier {
       },
     );
 
-    print(res.body);
-    this.autenticando = false;
+    autenticando = false;
 
     if (res.statusCode == 200) {
       final loginResponse = loginResponseFromJson(res.body);
-      this.usuario = loginResponse.usuario;
+      usuario = loginResponse.usuario;
       await _saveToken(loginResponse.token);
       return true;
     } else {

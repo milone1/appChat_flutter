@@ -13,6 +13,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final emailCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
     return Scaffold(
       backgroundColor: const Color(0xfff2f2f2),
       body: SafeArea(
@@ -29,7 +31,7 @@ class LoginScreen extends StatelessWidget {
                 _Form(),
                 const Labels(
                   route: 'register',
-                  subtitle: 'Crea una cuenta ahora',
+                  subTitle: 'Crea una cuenta ahora',
                   title: '¿No tienes una cuenta?',
                 ),
                 const Text(
@@ -47,9 +49,14 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _Form extends StatelessWidget {
-  final emailCtrl = TextEditingController();
-  final passCtrl = TextEditingController();
+class _Form extends StatefulWidget {
+  @override
+  _FormState createState() => _FormState();
+}
+
+class _FormState extends State<_Form> {
+  late final emailCtrl = TextEditingController();
+  late final passCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +83,9 @@ class _Form extends StatelessWidget {
           ),
           ButtonLogin(
             text: 'INGRESAR',
-            color: authService.autenticando ? Colors.grey : Colors.blueAccent,
+            color: authService.autenticando ? Colors.blueAccent : Colors.grey,
             onPressed: authService.autenticando
-                ? () {}
-                : () async {
+                ? () async {
                     FocusScope.of(context).unfocus();
 
                     final loginOk = await authService.Login(
@@ -87,11 +93,18 @@ class _Form extends StatelessWidget {
                     if (loginOk) {
                       socketService.connect();
                       // entrar a la ptra pantalla reemplazando la ruta que ya no se usara
+                      // ignore: use_build_context_synchronously
                       Navigator.pushReplacementNamed(context, 'user');
                     } else {
+                      // ignore: use_build_context_synchronously
                       showOpenDialog(context, 'Login Incorrecto!',
                           'Revise sus credenciales nuevamente');
                     }
+                  }
+                : () {
+                    // ignore: use_build_context_synchronously
+                    showOpenDialog(context, 'Login Incorrecto!',
+                        'Revise sus credenciales nuevamente');
                   },
           ),
         ],

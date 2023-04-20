@@ -1,12 +1,13 @@
 import 'package:appchat_flutter/models/user.dart';
 import 'package:appchat_flutter/services/auth_service.dart';
 import 'package:appchat_flutter/services/socket_service.dart';
+import 'package:appchat_flutter/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UserScreen extends StatefulWidget {
-  UserScreen({super.key});
+  const UserScreen({super.key});
   @override
   State<UserScreen> createState() => _UserScreenState();
 }
@@ -14,21 +15,21 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  final usuarios = [
-    User(
-      online: true,
-      email: 'juan@gmail.com',
-      nombre: 'Juan',
-      uid: '1',
-    ),
-    User(online: false, email: 'juanr@gmail.com', nombre: 'Juan', uid: '2'),
-    User(online: true, email: 'juan1@gmail.com', nombre: 'Juan', uid: '3'),
-  ];
+  final userService = UserService();
+  List<User> usuarios = [];
+
+  @override
+  void initState() {
+    _chargueUsers();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final socketService = Provider.of<SocketService>(context);
     final user = authService.usuario;
+
     return Scaffold(
         appBar: AppBar(
           title: Center(
@@ -51,14 +52,12 @@ class _UserScreenState extends State<UserScreen> {
           ),
           actions: <Widget>[
             Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: Icon(
-                Icons.check_circle_outline_rounded,
-                color: (socketService.serverStatus == ServerStatus.Online
-                    ? Colors.blue
-                    : Colors.red),
-              ),
-            ),
+                margin: const EdgeInsets.only(right: 10),
+                child: (socketService.serverStatus == ServerStatus.Online)
+                    ? const Icon(Icons.check_circle_outline,
+                        color: Colors.green)
+                    : const Icon(Icons.check_circle_outline,
+                        color: Colors.red)),
           ],
         ),
         body: SmartRefresher(
@@ -106,7 +105,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   _chargueUsers() async {
-    await Future.delayed(const Duration(milliseconds: 3000));
+    usuarios = await userService.getUsuarios();
+    setState(() {});
     _refreshController.refreshCompleted();
   }
 }

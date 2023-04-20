@@ -30,7 +30,7 @@ class RegisterScreen extends StatelessWidget {
                 const Labels(
                   route: 'login',
                   title: '¿Ya tienes una cuenta?',
-                  subtitle: 'Ingresa Ahora',
+                  subTitle: 'Ingresa Ahora',
                 ),
                 const Text(
                   "Terminos y concidiciones de uso",
@@ -92,8 +92,10 @@ class _Form extends StatelessWidget {
                         passCtrl.text.trim());
                     if (regsitroOk == true) {
                       socketService.connect();
+                      // ignore: use_build_context_synchronously
                       Navigator.pushReplacementNamed(context, 'user');
                     } else {
+                      // ignore: use_build_context_synchronously
                       showOpenDialog(
                           context, 'Registro Incorrecto', regsitroOk);
                     }

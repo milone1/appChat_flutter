@@ -36,7 +36,7 @@ class LoadingScreen extends StatelessWidget {
               __,
               ___,
             ) =>
-                UserScreen(),
+                const UserScreen(),
             transitionDuration: const Duration(
               milliseconds: 0,
             ),

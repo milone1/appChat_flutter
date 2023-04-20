@@ -14,7 +14,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final TextEditingController _txtController = TextEditingController();
   final _focusNode = FocusNode();
   bool _isActive = false;
-  List<ChatMesssage> _messages = [];
+  final List<ChatMesssage> _messages = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,8 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:appchat_flutter/Global/enviroments.dart';
+import 'package:appchat_flutter/services/auth_service.dart';
 import 'package:flutter/material.dart';
-
+import 'package:appchat_flutter/Global/enviroments.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -17,12 +17,15 @@ class SocketService with ChangeNotifier {
   IO.Socket get socket => _socket;
   Function get emit => _socket.emit;
 
-  void connect() {
+  void connect() async {
+    final token = await AuthService.getToken;
+
     // Dart client
     _socket = IO.io(Enviroments.socketUrl, {
       'transports': ['websocket'],
       'autoConnect': true,
       'forceNew': true,
+      'extraHeaders': {'x-token': token}
     });
 
     _socket.on('connect', (_) {

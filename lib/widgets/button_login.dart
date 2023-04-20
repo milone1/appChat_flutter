@@ -5,6 +5,7 @@ class ButtonLogin extends StatelessWidget {
       {super.key, required this.text, required this.onPressed, this.color});
   final String text;
   final Function() onPressed;
+  // ignore: prefer_typing_uninitialized_variables
   final color;
   @override
   Widget build(BuildContext context) {

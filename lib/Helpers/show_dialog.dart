@@ -12,10 +12,10 @@ showOpenDialog(BuildContext context, String title, String subTitle) {
         content: Text(subTitle),
         actions: <Widget>[
           MaterialButton(
-            child: Text('OK'),
             elevation: 5,
             textColor: Colors.blue,
             onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
           )
         ],
       ),
@@ -29,7 +29,7 @@ showOpenDialog(BuildContext context, String title, String subTitle) {
       actions: [
         CupertinoDialogAction(
           isDefaultAction: true,
-          child: Text('Ok'),
+          child: const Text('Ok'),
           onPressed: () => Navigator.pop(context),
         )
       ],
