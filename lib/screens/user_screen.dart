@@ -1,5 +1,6 @@
 import 'package:appchat_flutter/models/user.dart';
 import 'package:appchat_flutter/services/auth_service.dart';
+import 'package:appchat_flutter/services/chat_service.dart';
 import 'package:appchat_flutter/services/socket_service.dart';
 import 'package:appchat_flutter/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,12 @@ class _UserScreenState extends State<UserScreen> {
     return ListTile(
         title: Text(usuario.nombre),
         subtitle: Text(usuario.email),
+        onTap: () {
+          // print(usuario.nombre + usuario.email);
+          final chatService = Provider.of<ChatService>(context, listen: false);
+          chatService.userFor = usuario;
+          Navigator.pushNamed(context, 'chat');
+        },
         leading: CircleAvatar(
           backgroundColor: Colors.blueAccent,
           child: Text(

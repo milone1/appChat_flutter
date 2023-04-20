@@ -82,31 +82,28 @@ class _FormState extends State<_Form> {
             isPassword: true,
           ),
           ButtonLogin(
-            text: 'INGRESAR',
-            color: authService.autenticando ? Colors.blueAccent : Colors.grey,
-            onPressed: authService.autenticando
-                ? () async {
-                    FocusScope.of(context).unfocus();
+              text: 'INGRESAR',
+              color: emailCtrl.text.isNotEmpty && passCtrl.text.isNotEmpty
+                  ? Colors.blueAccent
+                  : Colors.grey,
+              onPressed: authService.autenticando
+                  ? () {}
+                  : () async {
+                      FocusScope.of(context).unfocus();
 
-                    final loginOk = await authService.Login(
-                        emailCtrl.text.trim(), passCtrl.text.trim());
-                    if (loginOk) {
-                      socketService.connect();
-                      // entrar a la ptra pantalla reemplazando la ruta que ya no se usara
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushReplacementNamed(context, 'user');
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      showOpenDialog(context, 'Login Incorrecto!',
-                          'Revise sus credenciales nuevamente');
-                    }
-                  }
-                : () {
-                    // ignore: use_build_context_synchronously
-                    showOpenDialog(context, 'Login Incorrecto!',
-                        'Revise sus credenciales nuevamente');
-                  },
-          ),
+                      final loginOk = await authService.Login(
+                          emailCtrl.text.trim(), passCtrl.text.trim());
+                      if (loginOk) {
+                        socketService.connect();
+                        // entrar a la ptra pantalla reemplazando la ruta que ya no se usara
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacementNamed(context, 'user');
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showOpenDialog(context, 'Login Incorrecto!',
+                            'Revise sus credenciales nuevamente');
+                      }
+                    }),
         ],
       ),
     );
