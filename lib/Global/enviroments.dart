@@ -2,9 +2,10 @@ import 'dart:io';
 
 class Enviroments {
   static String apiUrl = Platform.isAndroid
-      ? 'http://10.0.2.2:3000/api'
-      : 'http://localhost:3000/api';
+      ? 'https://appchatnodejs-production.up.railway.app/api'
+      : 'https://appchatnodejs-production.up.railway.app/api';
 
-  static String socketUrl =
-      Platform.isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
+  static String socketUrl = Platform.isAndroid
+      ? 'https://appchatnodejs-production.up.railway.app'
+      : 'https://appchatnodejs-production.up.railway.app';
 }

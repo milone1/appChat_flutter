@@ -13,8 +13,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailCtrl = TextEditingController();
-    final passCtrl = TextEditingController();
     return Scaffold(
       backgroundColor: const Color(0xfff2f2f2),
       body: SafeArea(

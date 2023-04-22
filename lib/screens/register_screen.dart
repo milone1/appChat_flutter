@@ -47,10 +47,18 @@ class RegisterScreen extends StatelessWidget {
   }
 }
 
-class _Form extends StatelessWidget {
-  final emailCtrl = TextEditingController();
-  final passCtrl = TextEditingController();
-  final nameCtrl = TextEditingController();
+class _Form extends StatefulWidget {
+  @override
+  State<_Form> createState() => _FormState();
+}
+
+class _FormState extends State<_Form> {
+  late final emailCtrl = TextEditingController();
+
+  late final passCtrl = TextEditingController();
+
+  late final nameCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
